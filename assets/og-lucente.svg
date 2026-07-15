@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Lucente Corporate social sharing image</title>
+  <desc id="desc">Editorial charcoal and gold graphic for Lucente Corporate.</desc>
+  <rect width="1200" height="630" fill="#111311"/>
+  <path d="M0 504h1200" stroke="#F3F0E8" stroke-opacity=".12"/>
+  <path d="M0 126h1200M240 0v630M480 0v630M720 0v630M960 0v630" stroke="#F3F0E8" stroke-opacity=".06"/>
+  <path d="M760 128h260l-94 374H666z" fill="#394238" stroke="#A88C52" stroke-opacity=".5"/>
+  <path d="M830 178h112l-52 212H778z" fill="#A88C52" fill-opacity=".18"/>
+  <text x="90" y="232" fill="#A88C52" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="6">INDEPENDENT TECHNOLOGY STUDIO</text>
+  <text x="88" y="342" fill="#F3F0E8" font-family="Arial, sans-serif" font-size="82" font-weight="800">LUCENTE</text>
+  <text x="88" y="430" fill="#F3F0E8" font-family="Arial, sans-serif" font-size="82" font-weight="800">CORPORATE</text>
+  <text x="92" y="492" fill="#D8D3C8" font-family="Arial, sans-serif" font-size="28">Technology and digital development</text>
+</svg>
