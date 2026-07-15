@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Lucente Corporate favicon</title>
+  <rect width="64" height="64" fill="#111311"/>
+  <rect x="10" y="10" width="44" height="44" fill="#111311" stroke="#A88C52" stroke-width="2"/>
+  <text x="32" y="39" text-anchor="middle" fill="#A88C52" font-family="Arial, sans-serif" font-size="18" font-weight="700">LC</text>
+</svg>
