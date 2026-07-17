@@ -18,7 +18,7 @@ export const site = {
   location: "Sydney, Australia",
   slogan: "Digital products for everyday ideas.",
   shortDescription:
-    "Lucente Corporate is a Sydney-based technology brand founded by Sahaan Kesavan and Farris Zaman, creating applications, digital products, websites and practical online experiences.",
+    "Lucente Corporate is a Sydney-based technology brand founded in 2025 by Sahaan Kesavan and Farris Zaman. It creates practical applications, digital products and flexible technology and design services.",
   purpose:
     "Lucente Corporate creates practical digital products and offers flexible technology and design services that turn ideas into useful, modern online experiences.",
   audience:
@@ -75,23 +75,21 @@ export const founders = [
 /** @type {Project[]} */
 export const projects = [
   {
-    slug: "lucente-admin",
-    name: "Lucente Admin",
-    url: "https://lucente-admin-five.vercel.app",
-    status: "in-development",
+    slug: "lucente-qr",
+    name: "Lucente QR",
+    url: "https://lucente-qr.vercel.app",
+    status: "live",
     description:
-      "Lucente Admin is a flexible management platform currently in development, designed to help individuals and teams organise tasks, projects, roles, workflows and everyday operations in one place.",
+      "Lucente QR is a live QR-code creation tool designed to help users generate and customise QR codes for practical personal and business uses.",
     purpose:
-      "Lucente Admin is being shaped around everyday operational clarity: planning work, assigning responsibilities, tracking project movement and keeping team workflows easier to understand.",
+      "Lucente QR makes practical QR creation easier for people who need simple, flexible ways to connect offline materials with online destinations.",
     features: [
-      "Task and project organisation",
-      "Role and workflow planning",
-      "Team operation views",
-      "Flexible everyday management structure"
+      "QR-code generation",
+      "Customisation for practical use cases",
+      "Personal and business utility",
+      "Simple digital sharing workflows"
     ],
-    availability: "In development",
-    notice:
-      "Lucente Admin is currently being developed, and its features, design and availability may change over time."
+    availability: "Live"
   },
   {
     slug: "lucente-calendar",
@@ -111,21 +109,23 @@ export const projects = [
     availability: "Live"
   },
   {
-    slug: "lucente-qr",
-    name: "Lucente QR",
-    url: "https://lucente-qr.vercel.app",
-    status: "live",
+    slug: "lucente-admin",
+    name: "Lucente Admin",
+    url: "https://lucente-admin-five.vercel.app",
+    status: "in-development",
     description:
-      "Lucente QR is a digital QR-code creation tool designed to help users generate and customise QR codes for practical personal and business uses.",
+      "Lucente Admin is a flexible management platform currently in development, designed to help individuals and teams organise tasks, projects, roles, workflows and everyday operations.",
     purpose:
-      "Lucente QR makes practical QR creation easier for people who need simple, flexible ways to connect offline materials with online destinations.",
+      "Lucente Admin is being shaped around everyday operational clarity: planning work, assigning responsibilities, tracking project movement and keeping team workflows easier to understand.",
     features: [
-      "QR-code generation",
-      "Customisation for practical use cases",
-      "Personal and business utility",
-      "Simple digital sharing workflows"
+      "Task and project organisation",
+      "Role and workflow planning",
+      "Team operation views",
+      "Flexible everyday management structure"
     ],
-    availability: "Live"
+    availability: "In development",
+    notice:
+      "Lucente Admin is currently being developed, and its features, design and availability may change over time."
   }
 ];
 
@@ -174,7 +174,7 @@ export const faq = [
   {
     question: "What is Lucente Corporate?",
     answer:
-      "Lucente Corporate is a Sydney-based technology brand founded by Sahaan Kesavan and Farris Zaman, creating applications, digital products, websites and practical online experiences."
+      "Lucente Corporate is a Sydney-based technology brand founded in 2025 by Sahaan Kesavan and Farris Zaman. It creates practical applications, digital products and flexible technology and design services."
   },
   {
     question: "Who founded Lucente Corporate?",
@@ -192,21 +192,30 @@ export const faq = [
   {
     question: "What does Lucente Corporate create?",
     answer:
-      "Lucente Corporate creates practical applications, digital products, websites and online experiences for everyday ideas."
+      "Lucente Corporate creates practical applications, digital products and flexible technology and design services."
   },
   {
-    question: "What services does Lucente Corporate provide?",
+    question: "What projects belong to Lucente Corporate?",
+    answer: "Lucente QR, Lucente Calendar and Lucente Admin are part of Lucente Corporate."
+  },
+  {
+    question: "Who is Sahaan Kesavan?",
     answer:
-      "Lucente Corporate provides web and app development, digital product development, UI and UX design, website development upon request, technology planning and digital branding."
+      "Sahaan Kesavan is the Co-Founder and Product Development Lead of Lucente Corporate. He leads application development, technical delivery and product planning from Sydney, Australia."
   },
   {
-    question: "Who can use Lucente products and services?",
+    question: "Who is Farris Zaman?",
     answer:
-      "Lucente products and services are designed for individuals, teams and organisations looking to simplify everyday tasks, organise work and turn ideas into practical online tools."
+      "Farris Zaman is the Co-Founder and Strategy and Marketing Lead of Lucente Corporate. He leads marketing, strategic planning, creative direction and product strategy from Newcastle, Australia."
   },
   {
-    question: "What projects are part of Lucente Corporate?",
-    answer: "Lucente Admin, Lucente Calendar and Lucente QR are part of Lucente Corporate."
+    question: "Which Lucente projects are live?",
+    answer: "Lucente Calendar and Lucente QR are live. Lucente Admin is in development."
+  },
+  {
+    question: "Is Lucente Admin available?",
+    answer:
+      "Lucente Admin is currently in development, and its features, design and availability may change over time."
   },
   {
     question: "Is Lucente Corporate a registered company?",
@@ -216,15 +225,6 @@ export const faq = [
   {
     question: "How can someone contact Lucente Corporate?",
     answer: "Lucente Corporate can be contacted at lucentecorporate@gmail.com."
-  },
-  {
-    question: "Is Lucente Admin available?",
-    answer:
-      "Lucente Admin is currently in development, and its features, design and availability may change over time."
-  },
-  {
-    question: "Which Lucente projects are live?",
-    answer: "Lucente Calendar and Lucente QR are live. Lucente Admin is in development."
   }
 ];
 

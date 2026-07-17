@@ -16,6 +16,9 @@ const attr = htmlEscape;
 const pathFor = (route) => (route === "/" ? "index.html" : `${route.replace(/^\/|\/$/g, "")}/index.html`);
 const absolute = (route) => `${site.domain}${route}`;
 const founderBySlug = (slug) => founders.find((founder) => founder.slug === slug);
+const orgId = `${site.domain}/#organization`;
+const websiteId = `${site.domain}/#website`;
+const founderId = (founder) => `${absolute(`/founders/${founder.slug}/`)}#person`;
 
 function writePage(route, html) {
   const file = pathFor(route);
@@ -138,6 +141,7 @@ function organizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": orgId,
     name: site.brandName,
     url: site.domain,
     email: site.email,
@@ -145,7 +149,7 @@ function organizationSchema() {
     description: site.shortDescription,
     logo: `${site.domain}/assets/favicon.svg`,
     location: { "@type": "Place", name: site.location },
-    founder: founders.map((founder) => ({ "@type": "Person", name: founder.name }))
+    founder: founders.map((founder) => ({ "@type": "Person", "@id": founderId(founder), name: founder.name, url: absolute(`/founders/${founder.slug}/`) }))
   };
 }
 
@@ -153,9 +157,11 @@ function websiteSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": websiteId,
     name: site.brandName,
     url: site.domain,
-    description: site.shortDescription
+    description: site.shortDescription,
+    publisher: { "@id": orgId }
   };
 }
 
@@ -180,20 +186,44 @@ function projectSchema(project) {
     url: project.url,
     description: project.description,
     applicationCategory: "ProductivityApplication",
-    creator: { "@type": "Organization", name: site.brandName, url: site.domain }
+    creator: { "@id": orgId, "@type": "Organization", name: site.brandName, url: site.domain },
+    isPartOf: { "@id": orgId }
   };
+}
+
+function projectProblem(project) {
+  const problems = {
+    "lucente-qr": "Lucente QR addresses the everyday need to create practical QR codes for links, materials and simple digital sharing without turning the task into a larger project.",
+    "lucente-calendar": "Lucente Calendar addresses the everyday challenge of keeping events, reminders, schedules and collaborative plans organised in one shared digital place.",
+    "lucente-admin": "Lucente Admin addresses the everyday need for clearer task, project, role and workflow organisation across personal or team operations."
+  };
+  return problems[project.slug] || `${project.name} focuses on making a practical digital workflow clearer and easier to manage.`;
+}
+
+function projectConnection(project) {
+  const connections = {
+    "lucente-qr": "Lucente QR is a live project developed under Lucente Corporate, the independent technology brand founded by <a href=\"/founders/sahaan-kesavan/\">Sahaan Kesavan</a> and <a href=\"/founders/farris-zaman/\">Farris Zaman</a>.",
+    "lucente-calendar": "Lucente Calendar is a live Lucente Corporate project from the independent technology brand founded by <a href=\"/founders/sahaan-kesavan/\">Sahaan Kesavan</a> and <a href=\"/founders/farris-zaman/\">Farris Zaman</a>.",
+    "lucente-admin": "Lucente Admin is an in-development project from Lucente Corporate, the independent technology brand founded by <a href=\"/founders/sahaan-kesavan/\">Sahaan Kesavan</a> and <a href=\"/founders/farris-zaman/\">Farris Zaman</a>."
+  };
+  return connections[project.slug] || `${project.name} is a project developed under Lucente Corporate, the independent technology brand founded by <a href="/founders/sahaan-kesavan/">Sahaan Kesavan</a> and <a href="/founders/farris-zaman/">Farris Zaman</a>.`;
 }
 
 function founderSchema(founder) {
   return {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": founderId(founder),
     name: founder.name,
     jobTitle: founder.role,
     homeLocation: { "@type": "Place", name: founder.location },
-    worksFor: { "@type": "Organization", name: site.brandName, url: site.domain },
+    worksFor: { "@id": orgId, "@type": "Organization", name: site.brandName, url: site.domain },
     url: absolute(`/founders/${founder.slug}/`)
   };
+}
+
+function personSchemas() {
+  return founders.map((founder) => founderSchema(founder));
 }
 
 function homePage() {
@@ -218,10 +248,10 @@ function homePage() {
   return layout({
     route: "/",
     current: "/",
-    title: "Lucente Corporate | Digital Products and Technology Services",
+    title: "Lucente Corporate | Sahaan Kesavan and Farris Zaman",
     description:
-      "Lucente Corporate is a Sydney-based technology brand founded by Sahaan Kesavan and Farris Zaman, creating practical digital products and flexible technology services.",
-    jsonLd: [organizationSchema(), websiteSchema()],
+      "Lucente Corporate is a Sydney-based technology brand founded by Sahaan Kesavan and Farris Zaman, creating Lucente QR, Lucente Calendar and Lucente Admin.",
+    jsonLd: [organizationSchema(), websiteSchema(), ...personSchemas()],
     pageClass: "home-page",
     children: `
     <section class="globe-hero" data-globe-hero>
@@ -230,7 +260,7 @@ function homePage() {
         <div class="globe-copy">
           <p class="eyebrow">Sydney Technology Brand</p>
           <h1>Digital products for everyday ideas.</h1>
-          <p class="lead">Lucente Corporate is an independent technology and digital development brand founded in 2025 by <a href="/founders/sahaan-kesavan/">Sahaan Kesavan</a> and <a href="/founders/farris-zaman/">Farris Zaman</a>. Based in Sydney, Australia, Lucente creates practical applications, digital products and flexible technology services for everyday ideas.</p>
+          <p class="lead">Lucente Corporate is an independent technology brand founded in 2025 by <a href="/founders/sahaan-kesavan/">Sahaan Kesavan</a> and <a href="/founders/farris-zaman/">Farris Zaman</a>. Based in Sydney, Australia, Lucente creates practical applications, digital products and flexible technology and design services.</p>
           <div class="hero-actions"><a class="button primary" href="/projects/">View Projects</a><a class="button secondary" href="/services/">Explore Services</a></div>
         </div>
         <div class="globe-panel" aria-label="Lucente project globe sequence">
@@ -240,11 +270,11 @@ function homePage() {
       </div>
       <div class="container globe-html-fallback" aria-label="Accessible project status summary">${stageHtml}</div>
     </section>
-    <section class="section light reveal"><div class="container split"><div><p class="eyebrow">Who We Are</p><h2>A practical technology brand for modern online tools.</h2></div><div><p class="lead">${site.shortDescription}</p><p>${site.purpose}</p><div class="cta-row"><a class="button gold" href="/about/">About Lucente</a><a class="button secondary dark" href="/faq/">Read FAQ</a></div></div></div></section>
+    <section class="section light reveal"><div class="container split"><div><p class="eyebrow">Who We Are</p><h2>A practical technology brand for modern online tools.</h2></div><div><p class="lead">${site.shortDescription}</p><p>${site.purpose}</p><p>Its official projects are <a href="/projects/lucente-qr/">Lucente QR</a>, <a href="/projects/lucente-calendar/">Lucente Calendar</a> and <a href="/projects/lucente-admin/">Lucente Admin</a>.</p><div class="cta-row"><a class="button gold" href="/about/">Learn about Lucente Corporate</a><a class="button secondary dark" href="/faq/">Read FAQ</a></div></div></div></section>
     <section class="section reveal"><div class="container split"><div><p class="eyebrow">Services</p><h2>Flexible technology and design services.</h2><p class="body-copy">Lucente supports digital ideas across product planning, interface design, web and app development, and online presence.</p><a class="text-link" href="/services/">View all services</a></div><div class="service-grid compact">${services.slice(0, 3).map((service) => `<article class="service-card"><h3>${service.name}</h3><p>${service.description}</p></article>`).join("")}</div></div></section>
     <section class="section light reveal"><div class="container"><p class="eyebrow">Projects</p><h2>Live and developing Lucente products.</h2><div class="project-grid">${previewProjects}</div></div></section>
     <section class="section reveal"><div class="container founder-grid">${founders.map((founder) => `<article class="founder-card">${monogram(founder.monogram)}<p class="eyebrow">${founder.role}</p><h2>${founder.name}</h2><p>${founder.description}</p><a class="text-link" href="/founders/${founder.slug}/">View Profile ↗</a></article>`).join("")}</div></section>
-    <section class="section olive reveal"><div class="container split"><div><p class="eyebrow">Contact</p><h2>Start a conversation with Lucente.</h2></div><div><p class="lead">For projects, product ideas, collaborations or questions, contact Lucente Corporate through the enquiry form.</p><div class="cta-row"><a class="button primary" href="/contact/">Contact Lucente</a><a class="button secondary" href="/faq/">Open FAQ</a></div></div></div></section>`
+    <section class="section olive reveal"><div class="container split"><div><p class="eyebrow">Contact</p><h2>Start a conversation with Lucente.</h2></div><div><p class="lead">For projects, product ideas, collaborations or questions, contact Lucente Corporate through the direct email link.</p><div class="cta-row"><a class="button primary" href="/contact/">Contact Lucente</a><a class="button secondary" href="/faq/">Open FAQ</a></div></div></div></section>`
   });
 }
 
@@ -255,9 +285,9 @@ function aboutPage() {
     title: "About Lucente Corporate | Sahaan Kesavan and Farris Zaman",
     description:
       "Learn about Lucente Corporate, a Sydney-based technology brand founded in 2025 by Sahaan Kesavan and Farris Zaman.",
-    jsonLd: [organizationSchema()],
+    jsonLd: [organizationSchema(), ...personSchemas()],
     children: `${pageTitle({ eyebrow: "About Lucente Corporate", h1: "A Sydney-based technology brand for practical digital products.", lead: `${site.shortDescription} ${site.purpose}` })}
-    <section class="section light"><div class="container stack"><article class="info-block"><h2>What Lucente Corporate is</h2><p>Lucente Corporate is an independent technology and digital development brand founded in 2025 by <a href="/founders/sahaan-kesavan/">Sahaan Kesavan</a> and <a href="/founders/farris-zaman/">Farris Zaman</a>.</p></article><article class="info-block"><h2>Purpose and approach</h2><p>${site.purpose}</p><p>Lucente focuses on clear planning, careful interface design, accessible implementation and practical online experiences for individuals, teams and organisations.</p></article><article class="info-block"><h2>Explore Lucente</h2><div class="cta-row"><a class="button gold" href="/founders/">Meet the founders</a><a class="button secondary dark" href="/projects/">View projects</a><a class="button secondary dark" href="/services/">View services</a></div></article></div></section>`
+    <section class="section light"><div class="container stack"><article class="info-block"><h2>What Lucente Corporate is</h2><p>Lucente Corporate is an independent technology brand founded in 2025 by <a href="/founders/sahaan-kesavan/">Sahaan Kesavan</a> and <a href="/founders/farris-zaman/">Farris Zaman</a>. It is based in Sydney, Australia.</p></article><article class="info-block"><h2>Purpose and approach</h2><p>${site.purpose}</p><p>Lucente focuses on clear planning, careful interface design, accessible implementation and practical online experiences for individuals, teams and organisations.</p></article><article class="info-block"><h2>Official Lucente projects</h2><p>Lucente Corporate currently lists <a href="/projects/lucente-qr/">Lucente QR</a>, <a href="/projects/lucente-calendar/">Lucente Calendar</a> and <a href="/projects/lucente-admin/">Lucente Admin</a> as its real projects.</p></article><article class="info-block"><h2>Explore Lucente</h2><div class="cta-row"><a class="button gold" href="/founders/">Meet the founders</a><a class="button secondary dark" href="/projects/">View projects</a><a class="button secondary dark" href="/services/">View services</a></div></article></div></section>`
   });
 }
 
@@ -280,7 +310,7 @@ function projectsPage() {
     current: "/projects/",
     title: "Lucente Corporate Projects | Calendar, Admin and QR",
     description: "Explore Lucente Admin, Lucente Calendar and Lucente QR, the real projects currently listed under Lucente Corporate.",
-    children: `${pageTitle({ eyebrow: "Projects", h1: "Lucente Corporate projects.", lead: "Only real Lucente projects are listed here: Lucente Admin, Lucente Calendar and Lucente QR." })}
+    children: `${pageTitle({ eyebrow: "Projects", h1: "Lucente Corporate projects.", lead: "Only real Lucente projects are listed here: Lucente QR, Lucente Calendar and Lucente Admin." })}
     <section class="section"><div class="container project-grid">${cards}</div></section>`
   });
 }
@@ -289,13 +319,13 @@ function projectPage(project) {
   const route = `/projects/${project.slug}/`;
   const crumbItems = [{ label: "Home", href: "/" }, { label: "Projects", href: "/projects/" }, { label: project.name }];
   const body = `${pageTitle({ eyebrow: "Project", h1: project.name, lead: project.description, actions: `<div class="cta-row">${status(project)}${launch(project)}</div>` })}
-    <section class="section light"><div class="container two-col"><div class="stack">${breadcrumbs(crumbItems)}${project.notice ? `<article class="notice"><h2>Development notice</h2><p>${project.notice}</p></article>` : ""}<article class="info-block"><h2>Overview</h2><p>${project.description}</p></article><article class="info-block"><h2>Purpose</h2><p>${project.purpose}</p></article></div><div class="stack"><article class="info-block"><h2>Core features</h2><ul>${project.features.map((feature) => `<li>${feature}</li>`).join("")}</ul></article><article class="info-block"><h2>Current availability</h2><p>${project.availability}</p>${status(project)}</article><article class="info-block"><h2>Lucente connection</h2><p>This project is part of Lucente Corporate, the independent technology brand founded by <a href="/founders/sahaan-kesavan/">Sahaan Kesavan</a> and <a href="/founders/farris-zaman/">Farris Zaman</a>.</p><a class="text-link" href="/projects/">Back to all projects</a></article></div></div></section>`;
+    <section class="section light"><div class="container two-col"><div class="stack">${breadcrumbs(crumbItems)}${project.notice ? `<article class="notice"><h2>Development notice</h2><p>${project.notice}</p></article>` : ""}<article class="info-block"><h2>Why it was created</h2><p>${project.purpose}</p></article><article class="info-block"><h2>Everyday problem it addresses</h2><p>${projectProblem(project)}</p></article><article class="info-block"><h2>What users can do</h2><ul>${project.features.map((feature) => `<li>${feature}</li>`).join("")}</ul></article></div><div class="stack"><article class="info-block"><h2>Current status</h2><p>${project.availability}</p>${status(project)}</article><article class="info-block"><h2>How it fits within Lucente Corporate</h2><p>${projectConnection(project)}</p><p>Learn more about <a href="/founders/sahaan-kesavan/">Sahaan Kesavan</a>, <a href="/founders/farris-zaman/">Farris Zaman</a> and the <a href="/projects/">Lucente Corporate project list</a>.</p></article><article class="info-block"><h2>Project links</h2><div class="cta-row">${launch(project)}<a class="button secondary dark" href="/projects/">Back to all projects</a></div></article></div></div></section>`;
   return layout({
     route,
     current: "/projects/",
     title: `${project.name} | Project by Lucente Corporate`,
     description: project.description,
-    jsonLd: [projectSchema(project), breadcrumbSchema(route, crumbItems)],
+    jsonLd: [organizationSchema(), projectSchema(project), breadcrumbSchema(route, crumbItems)],
     children: body
   });
 }
@@ -307,6 +337,7 @@ function foundersPage() {
     current: "/founders/",
     title: "Founders of Lucente Corporate | Sahaan Kesavan and Farris Zaman",
     description: "Meet Sahaan Kesavan and Farris Zaman, the co-founders of Lucente Corporate.",
+    jsonLd: [organizationSchema(), ...personSchemas()],
     children: `${pageTitle({ eyebrow: "Founders", h1: "Founded by Sahaan Kesavan and Farris Zaman.", lead: "Lucente Corporate is jointly founded by Sahaan Kesavan and Farris Zaman, with clear responsibilities across product development, strategy, planning and marketing." })}
     <section class="section light"><div class="container founder-grid">${cards}</div></section>`
   });
@@ -315,14 +346,18 @@ function foundersPage() {
 function founderPage(founder) {
   const route = `/founders/${founder.slug}/`;
   const crumbItems = [{ label: "Home", href: "/" }, { label: "Founders", href: "/founders/" }, { label: founder.name }];
+  const otherFounder = founders.find((item) => item.slug !== founder.slug);
+  const description = founder.slug === "sahaan-kesavan"
+    ? "Sahaan Kesavan is the Co-Founder and Product Development Lead of Lucente Corporate, leading application development, technical delivery and product planning."
+    : "Farris Zaman is the Co-Founder and Strategy and Marketing Lead of Lucente Corporate, leading marketing, planning, brand direction and product strategy.";
   return layout({
     route,
     current: "/founders/",
     title: `${founder.name} | Co-Founder of Lucente Corporate`,
-    description: `${founder.name} is ${founder.role} at Lucente Corporate, based in ${founder.location}.`,
-    jsonLd: [founderSchema(founder), breadcrumbSchema(route, crumbItems)],
+    description,
+    jsonLd: [organizationSchema(), founderSchema(founder), breadcrumbSchema(route, crumbItems)],
     children: `${pageTitle({ eyebrow: "Founder Profile", h1: founder.name, lead: founder.description })}
-    <section class="section light"><div class="container two-col"><div class="stack">${breadcrumbs(crumbItems)}${monogram(founder.monogram)}<a class="button primary" href="mailto:${site.email}">Contact Lucente ↗</a><a class="text-link" href="/founders/">Back to Founders</a></div><div class="stack"><article class="info-block"><h2>Professional role</h2><p>${founder.role}</p><p>${founder.location}</p></article><article class="info-block"><h2>Role at Lucente</h2><ul>${founder.responsibilities.map((item) => `<li>${item}</li>`).join("")}</ul></article><article class="info-block"><h2>Connection to Lucente Corporate</h2><p>${founder.name} is a co-founder of Lucente Corporate, the independent technology brand founded in 2025.</p></article></div></div></section>`
+    <section class="section light"><div class="container two-col"><div class="stack">${breadcrumbs(crumbItems)}${monogram(founder.monogram)}<a class="button primary" href="mailto:${site.email}">Contact Lucente ↗</a><a class="text-link" href="/founders/">Back to Founders</a></div><div class="stack"><article class="info-block"><h2>Professional role</h2><p>${founder.role}</p><p>${founder.location}</p></article><article class="info-block"><h2>Role at Lucente</h2><ul>${founder.responsibilities.map((item) => `<li>${item}</li>`).join("")}</ul></article><article class="info-block"><h2>Connection to Lucente Corporate</h2><p>${founder.name} is a co-founder of Lucente Corporate, the independent technology brand founded in 2025 by Sahaan Kesavan and Farris Zaman.</p></article><article class="info-block"><h2>Related Lucente links</h2><div class="cta-row"><a class="button secondary dark" href="/founders/${otherFounder.slug}/">About ${otherFounder.name}</a><a class="button secondary dark" href="/projects/">View Projects</a></div></article></div></div></section>`
   });
 }
 
