@@ -302,8 +302,7 @@ h3 { font-size: 1.22rem; line-height: 1.22; }
 }
 .page-title h1 { max-width: 1040px; }
 .split,
-.two-col,
-.contact-layout {
+.two-col {
   display: grid;
   grid-template-columns: 0.86fr 1.14fr;
   gap: clamp(32px, 7vw, 84px);
@@ -396,27 +395,16 @@ h3 { font-size: 1.22rem; line-height: 1.22; }
 }
 .faq-item p { margin: 14px 0 0; }
 
-.contact-form { display: grid; gap: 16px; }
-.field { display: grid; gap: 7px; }
-.field label,
-.checkbox { color: rgba(243,240,232,.84); font-weight: 800; }
-.field input,
-.field select,
-.field textarea {
-  width: 100%;
-  border: 1px solid rgba(243,240,232,.22);
-  border-radius: 8px;
-  background: rgba(243,240,232,.06);
+.contact-simple { max-width: 780px; }
+.email-display {
+  display: inline-flex;
+  margin: 4px 0 18px;
   color: var(--ivory);
-  padding: 14px 15px;
+  font-size: clamp(1.24rem, 3vw, 2rem);
+  font-weight: 850;
+  overflow-wrap: anywhere;
 }
-.field textarea { min-height: 160px; resize: vertical; }
-.field select option { background: var(--charcoal); }
-.checkbox { display: flex; align-items: flex-start; gap: 10px; font-size: .95rem; }
-.checkbox input { margin-top: 5px; }
-.field-error { min-height: 20px; margin: 0; color: #f0b6a8; font-size: .88rem; }
-.form-note { min-height: 24px; color: var(--stone); }
-.hp-field { position: absolute; left: -9999px; }
+.email-display:hover { color: var(--gold); }
 
 .site-footer {
   border-top: 1px solid var(--line);
